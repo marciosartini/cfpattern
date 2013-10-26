@@ -4,7 +4,7 @@
     <cfset objeto.javascript = "js/vendo/jquery, js/vendor/backbone, js/vendor/require">
     <cfset objeto.stylesheet = "css/style, css/core">
     <cfset objeto.layout = "">
-    <cfset objeto.page = "index">
+    <cfset objeto.view = "index">
     <cfset objeto.class = "usuario">
 
 

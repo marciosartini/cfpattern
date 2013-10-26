@@ -20,6 +20,10 @@
                 <cfset rootPartial = listToArray(application.AppPath, "/")>
                 <cfset elementOfArray = ArrayLen(rootPartial)>
                 <cfset application.folderContext = rootPartial[elementOfArray]>
+				
+				<!--- Contexto atŽ a pasta antes da aplicacao, normalmente atŽ wwwroot, mas n‹o necessariamente --->
+				<cfset elementDelete = ListFind(#application.AppPath#, #application.folderContext#, "/")>
+				<cfset application.pathUntilFolderContext = ListDeleteAt(application.AppPath, elementDelete, "/")>
 
                 <!--- Contexto da pasta da aplicacao --->
                 <cfset application.rootApplicationContext =  "/" & application.folderContext>
@@ -52,9 +56,24 @@
                 <cfset application.calledContext =  "/" & calledContext>
                 <cfset arrayCalledContext = listToArray(application.calledContext, "/")>
                 <cfset lenObjFolderContext =  arrayLen(arrayCalledContext)>
-                <cfset application.objetoFolderContext = arrayCalledContext[lenObjFolderContext]>
+			 
+
+				
+				 
+				<cfif lenObjFolderContext EQ 1>
+					<cfset application.objetoFolderContext = "">
+				<cfelse>
+					<cfset application.objetoFolderContext = arrayCalledContext[lenObjFolderContext]>
+				</cfif>
+                 
                 <cfset application.viewFolderContext = "/" & application.folderContext & "/views/" & application.objetoFolderContext>
                 <cfset application.layoutFolderContext = "/" & application.folderContext & "/layout/">
+				
+				<cfif ListLen(application.calledContext, "/") GT 1>
+					<cfset application.calledController = ListGetAt(application.calledContext, 2, "/")>
+				<<cfelse>
+					<cfset application.calledController = "">	
+		  		</cfif>
 
 
 				<cfif StructKeyExists(url, 'reset')>
@@ -68,115 +87,107 @@
 
 
 
-<cffunction
-name="onRequest"
-access="public"
-returntype="void"
-output="true"
-hint="I execute the page template.">
+		<cffunction name="onRequest" access="public" returntype="void" output="true" hint="I execute the page template.">
+	 
+
+			<!--- Define arguments. --->
+			<cfargument name="template" type="string" required="true" hint="I am the template that the user requested." />
+			 
+			<!---
+			Include the index page no matter what. This way, we
+			can have a front-controller based application no
+			matter what URL was requested.
+			--->
+			
+		 
+
+			<cfset fileContext = ListLast(getTemplatepath(), "/")>
+			
+			<cfset thisPath = ExpandPath("*.*")>
+			<cfset thisDirectory = GetDirectoryFromPath("/#application.pathUntilFolderContext#/#application.folderContext#/controller/#application.calledController#")>
+			
+			<cfset pathController = "#application.pathUntilFolderContext#/#application.folderContext#/controller/#application.calledController#">
+			 
+			
+		  
  
-<!--- Define arguments. --->
-<cfargument
-name="template"
-type="string"
-required="true"
-hint="I am the template that the user requested."
-/>
- 
-<!---
-Include the index page no matter what. This way, we
-can have a front-controller based application no
-matter what URL was requested.
---->
- 
-<cfset fileContext = ListLast(getTemplatepath(), "/")>
- 
- 
- 
-<cfinclude template="/#application.folderContext#/controller/#application.objetoFolderContext#/#fileContext#" />
- 
-<!--- Return out. --->
-<cfreturn />
-</cffunction>
- 
- 
-<cffunction
-name="onMissingTemplate"
-access="public"
-returntype="boolean"
-output="true"
-hint="I execute when a non-existing CFM page was requested.">
- 
-<!--- Define arguments. --->
-<cfargument
-name="template"
-type="string"
-required="true"
-hint="I am the template that the user requested."
-/>
- 
-<!---
-Execute the request initialization and processing.
-These will not be executed implicity for non-
-existing CFM templates.
---->
-<cfset this.onRequestStart( arguments.template ) />
-<cfset this.onRequest( arguments.template ) />
- 
-<!---
-If we've made it this far, everything executed
-normally. Return true to signal to ColdFusion
-that the event processed successfully (and that
-the request is complete).
---->
-<cfreturn true />
-</cffunction>
+
+
+			<!--- Verifica se existe o controller chamado --->
+			<cfif DirectoryExists("/#application.pathUntilFolderContext#/#application.folderContext#/controller/#application.calledController#")>
+			 	<cfif FileExists("#pathController#/#fileContext#")>
+					<cfinclude template="/#application.folderContext#/controller/#application.calledController#/#fileContext#" />
+				<cfelse>
+					<cfif FileExists("#pathController#/index.cfm")>
+						<cfinclude template="/#application.folderContext#/controller/#application.calledController#/index.cfm" />
+					<cfelse>
+						<cfinclude template="#getTemplatepath()#" />
+					</cfif>
+				</cfif>
+			<cfelse>
+				<cfinclude template="#getTemplatepath()#" />		  	
+			</cfif>
+			 
+			 
+		 
+			 
+			<!--- Return out. --->
+			<cfreturn />
+		</cffunction>
  
  
-<cffunction
-name="onError"
-access="public"
-returntype="void"
-output="true"
-hint="I execute when an uncaught error has occurred.">
+		<cffunction name="onMissingTemplate" access="public" returntype="boolean" output="true" hint="I execute when a non-existing CFM page was requested.">
+		 
+			<!--- Define arguments. --->
+			<cfargument name="template" type="string" required="true" hint="I am the template that the user requested." />
+			
+
+			<!---
+			Execute the request initialization and processing.
+			These will not be executed implicity for non-
+			existing CFM templates.
+			--->
+			<cfset this.onRequestStart( arguments.template ) />
+			<cfset this.onRequest( arguments.template ) />
+			 
+			<!---
+			If we've made it this far, everything executed
+			normally. Return true to signal to ColdFusion
+			that the event processed successfully (and that
+			the request is complete).
+			--->
+			<cfreturn true />
+		</cffunction>
  
-<!--- Define arguments. --->
-<cfargument
-name="exception"
-type="any"
-required="true"
-hint="I am the uncaught exception object."
-/>
  
-<cfargument
-name="event"
-type="string"
-required="false"
-default=""
-hint="I am the event in which the error occurred."
-/>
- 
-<!--- Output the exception. --->
-<h1>
-Error:
-</h1>
-<cfdump var="#arguments.exception#" />
-<cfabort />
- 
-<!--- Return out. --->
-<cfreturn />
-</cffunction>
+		<cffunction name="onError" access="public" returntype="void" output="true" hint="I execute when an uncaught error has occurred.">
+		 
+			<!--- Define arguments. --->
+			<cfargument name="exception" type="any" required="true" hint="I am the uncaught exception object." />
+			 
+			<cfargument name="event" type="string" required="false" default="" hint="I am the event in which the error occurred." />
+			 
+			<!--- Output the exception. --->
+			<h1>
+			Error:
+			</h1>
+			<cfdump var="#arguments.exception#" />
+			<cfabort />
+		 
+			<!--- Return out. --->
+			<cfreturn />
+		</cffunction>
 
 
 
 
 
   
- 
-    <cfset structAppend(
-        url,
-        createObject( "component", "UDF" )
-    ) />
+ 		<!--- Adiciona o funcao UDF na applicacao --->
+	    <cfset structAppend(
+	        url,
+	        createObject( "component", "UDF" )
+	    ) />
 
 
 </cfcomponent>

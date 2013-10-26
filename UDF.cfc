@@ -20,7 +20,7 @@ hint="Eu defini funcao para padronizar chamada das views.">
         <cfif NOT IsDefined("objeto.layout") OR objeto.layout EQ "" >
             <cfset layout = application.layoutFolderContext & '/layout.cfm'>
         <cfelse>
-            <cfset layout = #objeto.layout# & ".cfm">
+            <cfset layout = application.layoutFolderContext & #objeto.layout# & ".cfm">
         </cfif>
         
         <cfif NOT IsDefined("objeto.page") OR objeto.page EQ "" >
