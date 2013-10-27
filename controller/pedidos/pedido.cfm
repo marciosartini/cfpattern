@@ -62,7 +62,13 @@
 <cffunction name="novo" returntype="string">
 	<cfargument name="objeto" type="any" required="false">
 	<!--- Neste caso o usuario esta passando os dados pela url --->
-	<cfreturn "Incluindo um registro: " & objeto.url.nome />
+	<!--- Ainda pode ser passado par‰metro pelo form e pela url --->
+	<cfif isDefined("objeto.url.nome")>
+		<cfreturn "Incluindo um registro: " & objeto.url.nome & "------url=" & objeto.form.nome />
+	<cfelse>
+		<cfreturn "Par‰metro inv‡lido" />
+	</cfif>
+	
 </cffunction>
 
 <cffunction name="edita" returntype="string">
