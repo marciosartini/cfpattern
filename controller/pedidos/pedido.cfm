@@ -1,4 +1,10 @@
 <cfoutput>
+
+
+
+ 
+
+
     <cfset objeto = {}>
     <cfset objeto.title = "Pedidos">
     <cfset objeto.javascript = "js/vendo/jquery, js/vendor/backbone, js/vendor/require">
@@ -16,16 +22,56 @@
     <cfset usuario.salario = '2345'>
 
     <cfset objeto.usuario = usuario>
+	 
+	 
+ 	
+
+	<!--- Popula todas as variaveis tanto da url como de formularios ---> 
+	<cfset objeto.post = populate()>
  
-    <cfset objetoPage = loadView(objeto)>
  
 
+    <cfset objetoPage = loadView(objeto)>
+
+	<cfset method="">
+	<cfif application.methodController NEQ "">
+		<cfset method = #evaluate(application.methodController)#>
+	</cfif>
+	
+	<cfif application.methodController EQ "edita">
+		<cfoutput>#method(objeto.post)#</cfoutput>
+	</cfif>
+	
+	<cfif application.methodController EQ "novo">
+		<cfoutput>#method(objeto.post)#</cfoutput>
+	</cfif>
+	
+	 
  
-  
- 
- <cfinclude template="#objetoPage.layout#"> 
+
+ 	<cfinclude template="#objetoPage.layout#"> 
+
 
 
 
 
 </cfoutput>
+
+
+<!--- MƒTODOS DO CONTROLLER --->
+<cffunction name="novo" returntype="string">
+	<cfargument name="objeto" type="any" required="false">
+	<!--- Neste caso o usuario esta passando os dados pela url --->
+	<cfreturn "Incluindo um registro: " & objeto.url.nome />
+</cffunction>
+
+<cffunction name="edita" returntype="string">
+	<cfargument name="objeto" type="any" required="false">
+	<!--- Neste caso o usuario esta passando os dados pelo form, Ž validado, se estiver vindo pela url somente, devolve o erro  --->
+	<cfif isDefined("objeto.form.nome")>
+		<cfreturn "Editando um registro: " & objeto.form.nome  />
+	<cfelse>
+		<cfreturn "Par‰metro inv‡lido" />
+	</cfif>
+	
+</cffunction>

@@ -39,5 +39,26 @@ hint="Eu defini funcao para padronizar chamada das views.">
 
 
     </cffunction>
+	
+	<cffunction name="populate"
+				access="public"
+				returntype="Any"
+				output="false"
+				hint="Retorna as vari‡veis enviadas pelo formul‡rio">
+				<cfargument name="varsposts" type="any" required="false">
+				
+				<cfset this.form = #form#>
+				<cfset this.url = #url#>
+				 
+				
+				<cfreturn this />	
+	
+	</cffunction>
+	
+	
+	
+	
+	
+	
  
 </cfcomponent>

@@ -66,20 +66,44 @@
 					<cfset application.objetoFolderContext = arrayCalledContext[lenObjFolderContext]>
 				</cfif>
                  
-                <cfset application.viewFolderContext = "/" & application.folderContext & "/views/" & application.objetoFolderContext>
-                <cfset application.layoutFolderContext = "/" & application.folderContext & "/layout/">
+              
 				
-				<cfif ListLen(application.calledContext, "/") GT 1>
+				<cfif ListLen(application.calledContext, "/") GT 1> 
 					<cfset application.calledController = ListGetAt(application.calledContext, 2, "/")>
-				<<cfelse>
+				<cfelse>
 					<cfset application.calledController = "">	
 		  		</cfif>
-
+		  		
+		  		
+		  		<!--- 
+		  			Detecta o mŽtodo escolhido pelo usuario, se for informado, ex: /app/usuario/edita/usuario.cfm
+		  			*app = contexto
+		  			*usuario = pasta do controle
+		  			*edita = o mŽtodo informado pelo usuario
+		  			*usuario.cfm = arquivo do controle
+		  		 --->
+		  		<cfif ListLen(application.calledContext, "/") GT 2> 
+					<cfset application.methodController = ListGetAt(application.calledContext, 3, "/")>
+					<cfset isMethod = FindNoCase(".cfm", application.methodController)>
+					<cfif isMethod>
+						<cfset application.methodController = "">	
+					</cfif>
+				<cfelse>
+					<cfset application.methodController = "">	
+		  		</cfif>
+		  		
+		  		
+		  		
+ 
+  				<cfset application.viewFolderContext = "/" & application.folderContext & "/views/" & application.calledController>
+                <cfset application.layoutFolderContext = "/" & application.folderContext & "/layout/">
 
 				<cfif StructKeyExists(url, 'reset')>
 					   <cfset onApplicationStart() /> 
 					   <cfset structClear(session) />
 				</cfif>
+			
+
 				<cfreturn true />	
 			</cffunction>
 
@@ -99,7 +123,8 @@
 			matter what URL was requested.
 			--->
 			
-		 
+	
+
 
 			<cfset fileContext = ListLast(getTemplatepath(), "/")>
 			
@@ -109,26 +134,32 @@
 			<cfset pathController = "#application.pathUntilFolderContext#/#application.folderContext#/controller/#application.calledController#">
 			 
 			
-		  
+		    	
  
 
 
 			<!--- Verifica se existe o controller chamado --->
 			<cfif DirectoryExists("/#application.pathUntilFolderContext#/#application.folderContext#/controller/#application.calledController#")>
 			 	<cfif FileExists("#pathController#/#fileContext#")>
-					<cfinclude template="/#application.folderContext#/controller/#application.calledController#/#fileContext#" />
+					<cfinclude template="/#application.folderContext#/controller/#application.calledController#/#fileContext#" /> 
 				<cfelse>
 					<cfif FileExists("#pathController#/index.cfm")>
 						<cfinclude template="/#application.folderContext#/controller/#application.calledController#/index.cfm" />
 					<cfelse>
-						<cfinclude template="#getTemplatepath()#" />
+			 
+						<cfoutput>#application.calledContext# </cfoutput>	 
+						<cfset pos = ListFindNoCase(getTemplatepath(), application.folderContext, '/')>
+						<cfset pos = ListGetAt(getTemplatepath(), pos, '/')>
+					<!--- 	<cfoutput>#ListRest(temp)#</cfoutput> --->
+					
+						<cfinclude template="#application.calledContext#/index.cfm" />
 					</cfif>
 				</cfif>
 			<cfelse>
-				<cfinclude template="#getTemplatepath()#" />		  	
+				<cfinclude template="#application.calledContext#/index.cfm" />		  	
 			</cfif>
 			 
-			 
+			
 		 
 			 
 			<!--- Return out. --->
