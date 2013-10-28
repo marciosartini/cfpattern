@@ -9,7 +9,7 @@
     <cfset objeto.title = "Pedidos">
     <cfset objeto.javascript = "js/vendo/jquery, js/vendor/backbone, js/vendor/require">
     <cfset objeto.stylesheet = "css/style, css/core">
-    <cfset objeto.layout = "layoutPedidos">
+    <cfset objeto.layout = "layout">
     <cfset objeto.view = "index">
     <cfset objeto.class = "pedido">
 

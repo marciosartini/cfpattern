@@ -30,6 +30,8 @@
 <body class="<cfoutput>#objeto.class#</cfoutput>" id="<cfoutput>#objeto.class#</cfoutput>">
  
 <div id="content">
+
+    SO LAYOUT
      
      <cfinclude template = "#application.viewFolderContext#/#objetoPage.page#">  
 </div>
