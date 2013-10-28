@@ -1,4 +1,4 @@
-<cfoutput>
+ï»¿<cfoutput>
 
 
 
@@ -58,26 +58,26 @@
 </cfoutput>
 
 
-<!--- MƒTODOS DO CONTROLLER --->
+<!--- MÆ’TODOS DO CONTROLLER --->
 <cffunction name="novo" returntype="string">
 	<cfargument name="objeto" type="any" required="false">
 	<!--- Neste caso o usuario esta passando os dados pela url --->
-	<!--- Ainda pode ser passado par‰metro pelo form e pela url --->
+	<!--- Ainda pode ser passado parâ€°metro pelo form e pela url --->
 	<cfif isDefined("objeto.url.nome")>
 		<cfreturn "Incluindo um registro: " & objeto.url.nome & "------url=" & objeto.form.nome />
 	<cfelse>
-		<cfreturn "Par‰metro inv‡lido" />
+		<cfreturn "Parâ€°metro invâ€¡lido" />
 	</cfif>
 	
 </cffunction>
 
 <cffunction name="edita" returntype="string">
 	<cfargument name="objeto" type="any" required="false">
-	<!--- Neste caso o usuario esta passando os dados pelo form, Ž validado, se estiver vindo pela url somente, devolve o erro  --->
+	<!--- Neste caso o usuario esta passando os dados pelo form, Å½ validado, se estiver vindo pela url somente, devolve o erro  --->
 	<cfif isDefined("objeto.form.nome")>
 		<cfreturn "Editando um registro: " & objeto.form.nome  />
 	<cfelse>
-		<cfreturn "Par‰metro inv‡lido" />
+		<cfreturn "Parâ€°metro invâ€¡lido" />
 	</cfif>
 	
 </cffunction>
