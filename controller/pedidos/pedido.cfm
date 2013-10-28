@@ -67,7 +67,7 @@
 	<cfif isDefined("objeto.url.nome")>
 		<cfreturn "Incluindo um registro: " & objeto.url.nome & "------url=" & objeto.form.nome />
 	<cfelse>
-		<cfreturn "Par‰metro inv‡lido" />
+		<cfreturn "Parâmetro inválido" />
 	</cfif>
 	
 </cffunction>
@@ -78,7 +78,7 @@
 	<cfif isDefined("objeto.form.nome")>
 		<cfreturn "Editando um registro: " & objeto.form.nome  />
 	<cfelse>
-		<cfreturn "Par‰metro inv‡lido" />
+		<cfreturn "Parâmetro inválido" />
 	</cfif>
 	
 </cffunction>

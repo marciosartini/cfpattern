@@ -1,6 +1,6 @@
 ﻿<div class="left">
 MINHA VIEW BUSCANDO NA PASTA VIEWS/PEDIDOS
- s‹o
+  são
 <!--- <cfdump var="#objetoPage.usuario#"> --->
 </div>
 
