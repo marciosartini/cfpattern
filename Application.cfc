@@ -28,6 +28,13 @@
                 <!--- Contexto da pasta da aplicacao --->
                 <cfset application.rootApplicationContext =  "/" & application.folderContext>
 				
+				
+				
+				<cfset application.factoryPath = "cfpattern.lib" />
+				 
+
+				<cfset getInstances() />
+				
                 <cfreturn true /> 
 			
 			
@@ -95,8 +102,12 @@
 		  		
 		  		
  
-  				<cfset application.viewFolderContext = "/" & application.folderContext & "/views/" & application.calledController>
-                <cfset application.layoutFolderContext = "/" & application.folderContext & "/layout/">
+				<cfset application.viewFolderContext = "/" & application.folderContext & "/views/" & application.calledController>
+        		<cfset application.layoutFolderContext = "/" & application.folderContext & "/layout/">
+				
+				<cfif not StructKeyExists(application, 'factory')>
+					<cfset onApplicationStart() />
+				</cfif>
 
 				<cfif StructKeyExists(url, 'reset')>
 					   <cfset onApplicationStart() /> 
@@ -146,7 +157,6 @@
 					<cfif FileExists("#pathController#/index.cfm")>
 						<cfinclude template="/#application.folderContext#/controller/#application.calledController#/index.cfm" />
 					<cfelse>
-			 
 						<cfoutput>#application.calledContext# </cfoutput>	 
 						<cfset pos = ListFindNoCase(getTemplatepath(), application.folderContext, '/')>
 						<cfset pos = ListGetAt(getTemplatepath(), pos, '/')>
@@ -156,7 +166,7 @@
 					</cfif>
 				</cfif>
 			<cfelse>
-				<cfinclude template="#application.calledContext#/index.cfm" />		  	
+				<cfinclude template="#application.calledContext#/#fileContext#" />		  	
 			</cfif>
 			 
 			
@@ -209,16 +219,21 @@
 			<cfreturn />
 		</cffunction>
 
-
+		<cffunction name="getInstances" access="public" output="false" hint="Funcao que busca por instancias existentes.">
+			<!--- FACTORY --->
+			<cflock scope="application" timeout="30" type="exclusive">
+				<cfset application.factory = CreateObject( "component", "#Application.factoryPath#.Factory" ).init() />
+			</cflock>
+		</cffunction>
 
 
 
   
  		<!--- Adiciona o funcao UDF na applicacao --->
-	    <cfset structAppend(
+	    <!--- <cfset structAppend(
 	        url,
 	        createObject( "component", "UDF" )
-	    ) />
+	    ) /> --->
 
 
 </cfcomponent>

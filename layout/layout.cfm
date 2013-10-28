@@ -31,7 +31,7 @@
  
 <div id="content">
      
-     <cfinclude template = "#application.viewFolderContext#/#objetoPage.page#">  
+    <cfinclude template = "#application.viewFolderContext#/#objetoPage.page#">  
 </div>
 
 </body>

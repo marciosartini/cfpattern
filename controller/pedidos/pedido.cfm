@@ -27,11 +27,12 @@
  	
 
 	<!--- Popula todas as variaveis tanto da url como de formularios ---> 
-	<cfset objeto.post = populate()>
+	<cfset objeto.post = application.factory.getInstance('UDF').populate()>  
+	<!--- <cfset objeto.post = populate()> --->
  
  
-
-    <cfset objetoPage = loadView(objeto)>
+	<cfset objetoPage = application.factory.getInstance('UDF').loadView(objeto)>  
+    <!--- <cfset objetoPage = loadView(objeto)> --->
 
 	<cfset method="">
 	<cfif application.methodController NEQ "">

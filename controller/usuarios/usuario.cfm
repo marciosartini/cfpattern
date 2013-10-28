@@ -17,7 +17,11 @@
 
     <cfset objeto.usuario = usuario>
  
-    <cfset objetoPage = loadView(objeto)>
+
+  	<cfset objetoPage = application.factory.getInstance('UDF').loadView(objeto)>  
+ 
+	<!--- Chamando a rotina acima --->
+    <!--- <cfset objetoPage = loadView(objeto)> --->
  
 
  
