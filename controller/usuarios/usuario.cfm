@@ -1,6 +1,6 @@
-<cfoutput>
+﻿<cfoutput>
     <cfset objeto = {}>
-    <cfset objeto.title = "Usu�rios">
+    <cfset objeto.title = "Usu‡rios">
     <cfset objeto.javascript = "js/vendo/jquery, js/vendor/backbone, js/vendor/require">
     <cfset objeto.stylesheet = "css/style, css/core">
     <cfset objeto.layout = "">
