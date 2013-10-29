@@ -1,7 +1,7 @@
 ﻿<div class="left">
 MINHA VIEW BUSCANDO NA PASTA VIEWS/PEDIDOS
   são
-<!--- <cfdump var="#objetoPage.usuario#"> --->
+  <cfdump var="#objeto.resposta#">  
 </div>
 
 <form name="cadastro" method="post" action="pedido.cfm?nome=MARCIOSARTINI">

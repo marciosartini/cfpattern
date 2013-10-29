@@ -36,19 +36,36 @@
 
 	<cfset method="">
 	<cfif application.methodController NEQ "">
-		<cfset method = #evaluate(application.methodController)#>
+		<!--- <cfset method = #evaluate(application.methodController)#> --->
 	</cfif>
 	
 	<cfif application.methodController EQ "edita">
-		<cfoutput>#method(objeto.post)#</cfoutput>
+		<!--- <cfoutput>#method(objeto.post)#</cfoutput> --->
 	</cfif>
 	
 	<cfif application.methodController EQ "novo">
-		<cfoutput>#method(objeto.post)#</cfoutput>
+		<!--- <cfoutput>#method(objeto.post)#</cfoutput> --->
 	</cfif>
 	
+	<!--- Criar instancia para controller, pegar a pasta do contexto e criar a instancia a partir dela, 
+	Ex.:  www.sistema.com.br/usuarios/edita/index.cfm
+	Criar class usuarios.cfc com todos os métodos que julgar necessários, neste caso usuário está passando [ edita ] como método do controller
+	
+	Então será instanciado: controller = application.factory.getInstance('controllerPedidos').init()>
+	Caminho do componente controller será a pasta de {controller/controle chamado/controllerChamado.cfc]#application.rootApplicationContext#.controller.#application.calledController#.#application.calledController#
+	
+	 --->
+	  
+
+	 <cfset controller = application.factory.getInstance('controllerPedidos').init()> 
 	 
- 
+	 
+	 
+	 <cfset resposta = controller.edita().acao>
+	 
+	 
+ 	<cfset objeto.resposta = resposta>
+
 
  	<cfinclude template="#objetoPage.layout#"> 
 
@@ -71,14 +88,4 @@
 	</cfif>
 	
 </cffunction>
-
-<cffunction name="edita" returntype="string">
-	<cfargument name="objeto" type="any" required="false">
-	<!--- Neste caso o usuario esta passando os dados pelo form, Ž validado, se estiver vindo pela url somente, devolve o erro  --->
-	<cfif isDefined("objeto.form.nome")>
-		<cfreturn "Editando um registro: " & objeto.form.nome  />
-	<cfelse>
-		<cfreturn "Parâmetro inválido" />
-	</cfif>
-	
-</cffunction>
+ 

@@ -7,7 +7,8 @@
 
     <cffunction name="getInstance" access="public" output="false" returntype="any">
 	        <cfargument name="name" type="string" required="true" />
-	       
+	      
+
             <!--- Verifica se a instancia já foi carregada, caso contrário cria a instancia do objeto --->
             <cfif not StructKeyExists(variables.instance, arguments.name)>
                 <cfset variables.instance[ arguments.name ] = createInstance( arguments.name )>
@@ -21,9 +22,15 @@
         <cfswitch expression="#arguments.name#">
 			 
             <cfcase value="UDF"> 
+                <cfreturn CreateObject( "component", "#application.folderContext#.UDF" ) />
+                <cfbreak>
+            </cfcase>
+			
+			 <cfcase value= "controllerPedidos"> 
 				
 
-                <cfreturn CreateObject( "component", "#application.folderContext#.UDF" ) />
+                <cfreturn CreateObject( "component", "#application.folderContext#..controller.#application.calledController#.#arguments.name#" ) />
+               <!---  <cfreturn CreateObject( "component", "#application.rootApplicationContext#.controller.#application.calledController#.#arguments.name#" ) /> --->
                 <cfbreak>
             </cfcase>
 			
