@@ -19,28 +19,24 @@
 
     <cffunction name="createInstance" access="private" output="false" returntype="any">
         <cfargument name="name" type="string" required="true" />
-        <cfswitch expression="#arguments.name#">
-			 
-            <cfcase value="UDF"> 
-                <cfreturn CreateObject( "component", "#application.folderContext#.UDF" ) />
-                <cfbreak>
-            </cfcase>
-			
-			 <cfcase value= "controllerPedidos"> 
-				
-
-                <cfreturn CreateObject( "component", "#application.folderContext#..controller.#application.calledController#.#arguments.name#" ) />
-               <!---  <cfreturn CreateObject( "component", "#application.rootApplicationContext#.controller.#application.calledController#.#arguments.name#" ) /> --->
-                <cfbreak>
-            </cfcase>
-			
-			<!--- <cfcase value="View"> 
-                <cfreturn CreateObject( "component", "#Application.componentPath#.empresas.Empresas" ).init() />
-                <cfbreak>
-            </cfcase> --->
-			 
-			 
-        </cfswitch>
+		
+		<!--- Tratamento de classe controller --->		
+		<cfif findnocase('controller', arguments.name)>
+		    <cfswitch expression="#arguments.name#">
+				 <cfcase value= "controllerPedidos"> 
+	                <cfreturn CreateObject( "component", "#application.folderContext#..controller.#application.calledController#.#arguments.name#" ) />
+	                <cfbreak>
+	            </cfcase>
+        	</cfswitch>
+		<cfelse>
+			<cfswitch expression="#arguments.name#">
+	            <cfcase value="UDF"> 
+	                <cfreturn CreateObject( "component", "#application.folderContext#.UDF" ) />
+	                <cfbreak>
+	            </cfcase>
+	        </cfswitch>
+		</cfif>
+    
     </cffunction>
 
     <cffunction name="listInstance" access="public" output="false" returntype="any">
